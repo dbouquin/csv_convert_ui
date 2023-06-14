@@ -1,5 +1,5 @@
-import csv
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, send_file
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from csv_transformer import modify_csv
 import os
 
 app = Flask(__name__)
@@ -21,33 +21,12 @@ def upload_file():
         file.save(file_path)
 
         # Modify the CSV file and get a new file path
-        modified_file = modify_csv(file_path)
+        modified_file_path = modify_csv(file_path)
+        modified_file_name = os.path.basename(modified_file_path)
 
-        return redirect(url_for("confirmation", filename=file.filename))
+        return redirect(url_for("confirmation", filename=modified_file_name))
 
     return render_template("upload.html")
-
-def modify_csv(file_path):
-    # Generate the new file name
-    new_file_path = os.path.splitext(file_path)[0]
-    modified_file = new_file_path + "_modified.csv"
-    exports_dir = app.config["EXPORTS_DIR"]
-    modified_file_path = os.path.join(exports_dir, os.path.basename(modified_file))
-
-    with open(file_path, "r", newline="") as input_file, open(modified_file_path, "w", newline="") as output_file:
-        reader = csv.reader(input_file)
-        writer = csv.writer(output_file)
-
-        # Modify the header row
-        header = next(reader)
-        header[0] = "SUCCESS"
-        writer.writerow(header)
-
-        # Copy the remaining rows
-        for row in reader:
-            writer.writerow(row)
-
-    return modified_file
 
 @app.route("/confirmation/<filename>")
 def confirmation(filename):
