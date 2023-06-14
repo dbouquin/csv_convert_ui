@@ -1,0 +1,12 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmation</title>
+</head>
+<body>
+    <h1>File Upload Confirmation</h1>
+    <p>Your file "{{ filename }}" has been successfully uploaded and modified. The modified file is available for download:</p>
+    <p><a href="{{ url_for('download', filename=filename|replace('.csv', '_modified.csv')) }}">Download Modified File</a></p>
+</body>
+</html>
