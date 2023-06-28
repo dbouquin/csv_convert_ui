@@ -1,5 +1,6 @@
 #%%
 import os
+import config
 import csv
 import pandas as pd
 import re
@@ -288,7 +289,7 @@ def modify_csv(file_path):
     # define function to use USPS API to return validated addresses
     def validate_address(address1, address2, address3, city, zip_postalcode):
         api_url = "https://secure.shippingapis.com/ShippingAPI.dll"
-        username = "3NATIO834I773"
+        username = config.USPS_API_KEY
 
         params = {
             "API": "Verify",
