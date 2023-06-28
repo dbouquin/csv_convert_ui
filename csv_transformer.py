@@ -192,6 +192,9 @@ def modify_csv(file_path):
     df['FULLNAME'] = df['FIRSTNAME'].str.cat(df['MIDDLENAME_INITIAL'], \
                                              sep=' ', na_rep='').str.cat(df['LASTNAME'], \
                                                                          sep=' ', na_rep='').str.cat(df['SUFFIX'], sep=' ', na_rep='')
+    # review if fullname contains a number
+    df.loc[df['FULLNAME'].str.contains('\d', regex=True), 'REVIEW'] = 'Y'
+
     #%%
     # create reference columns so Excel can sort on length of names
     df['FIRSTNAME_LEN'] = df['FIRSTNAME'].str.len()
