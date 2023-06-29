@@ -1,30 +1,30 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, send_from_directory
+from task_manager.task_manager import TaskManager
 import uuid
 import time
 import os
-from csv_transformer import modify_csv
-from task_manager.task_manager import TaskManager
 
 app = Flask(__name__)
 task_manager = TaskManager()
 
 @app.route('/')
 def index():
-    return render_template('upload.html')
+    return render_template('index.html')
 
 @app.route('/convert', methods=['POST'])
 def convert():
-    # Start a new task and get the task identifier
-    task_id = task_manager.start_task()
+    if request.method == 'POST':
+        # Start a new task and get the task identifier
+        task_id = task_manager.start_task()
 
-    # Retrieve the uploaded file
-    file = request.files['file']
+        # Retrieve the uploaded file
+        file = request.files['file']
 
-    # Process the file asynchronously in the task manager
-    task_manager.process_file(task_id, file)
+        # Process the file asynchronously in the task manager
+        task_manager.process_file(task_id, file)
 
-    # Return the task identifier to the client
-    return jsonify({'task_id': task_id})
+        # Return the task identifier to the client
+        return jsonify({'task_id': task_id})
 
 @app.route('/progress/<task_id>')
 def progress(task_id):
