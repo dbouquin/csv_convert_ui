@@ -13,11 +13,8 @@ class TaskManager:
         return task_id
 
     def process_file(self, task_id, file):
-        # Example long-running file processing
-        # Modify this method with your actual file processing logic
-
-        # Here, we simulate a time-consuming task by sleeping for 2 seconds
-        time.sleep(2)
+        # Perform file processing by calling the appropriate function from csv_transformer
+        process_csv.process_file(file)
 
         # Update the task progress to 100% after processing is complete
         self.tasks[task_id]['progress'] = 100
@@ -32,12 +29,9 @@ class TaskManager:
         return None, None
 
     def _generate_task_id(self):
-        # Generate a unique task ID, e.g., using UUID
-        # Modify this method according to your requirements
         return str(uuid.uuid4())
 
     def _calculate_estimated_time(self, progress, elapsed_time):
-        # Calculate the estimated time remaining based on progress and elapsed time
         if progress == 0:
             return None
         estimated_time = (elapsed_time / progress) * (100 - progress)
